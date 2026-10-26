@@ -2,3 +2,8 @@
 # datasets installs PyArrow, which is used by the direct QASPER Parquet loader.
 datasets>=4.8.5,<5.0.0
 requests>=2.32.2,<3.0.0
+
+# Local Qwen3-8B validation. Accelerate is required by device_map="auto".
+torch>=2.6.0,<3.0.0
+transformers>=4.51.0,<5.0.0
+accelerate>=1.0.0,<2.0.0
