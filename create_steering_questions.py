@@ -23,6 +23,10 @@ import requests
 from datasets import load_dataset
 
 KILT_URL = "https://dl.fbaipublicfiles.com/KILT/eli5-dev-kilt.jsonl"
+QASPER_TRAIN_PARQUET = (
+    "https://huggingface.co/datasets/allenai/qasper/resolve/"
+    "refs%2Fconvert%2Fparquet/qasper/train/0000.parquet"
+)
 TARGETS = {"EntailmentBank": 100, "KILT-ELI5": 70, "QASPER": 30}
 EXPLANATORY = re.compile(r"\b(how|why|explain|what causes|what happens|in what way|what is the difference|what are the implications)\b", re.I)
 
@@ -91,7 +95,9 @@ def kilt_candidates(rng):
 
 
 def qasper_candidates(rng):
-    ds = load_dataset("allenai/qasper", split="train")
+    # The QASPER repository uses a legacy dataset script, which modern versions
+    # of `datasets` no longer execute. Load its Hub-generated Parquet split.
+    ds = load_dataset("parquet", data_files=QASPER_TRAIN_PARQUET, split="train")
     rows = []
     for paper in ds:
         qas = paper.get("qas") or {}
